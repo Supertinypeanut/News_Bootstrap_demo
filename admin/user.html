@@ -71,7 +71,7 @@
 <!-- <script src="./libs/jquery-1.12.4.min.js"></!-->-->
 <script>
   $(function() {
-    //   获取当前用户信息，进行页面渲然
+    //   ---------------获取当前用户信息，进行页面渲然----------
     $.ajax({
       type: 'get',
       url: window.BigNew.user_detail,
@@ -92,7 +92,37 @@
         // 单独设置照片
         $('.user_pic').prop("src", data.data.userPic)
       }
-    })
+    });
+
+    // --------------------用户信息修改----------------
+    // 预览选择文件
+    $("#exampleInputFile").change(function() {
+      var objUrl = URL.createObjectURL(this.files[0]);
+      //   改变链接
+      $(this).siblings('label').children('img').prop('src', objUrl);
+    });
+    // 点击修改按钮
+    $('.btn.btn-success.btn-edit').click(function(e) {
+      e.preventDefault();
+      // 由于是from表单对象，所以提交直接使用formData对象提交
+      var FD = new FormData($('form')[0]);
+      $.ajax({
+        type: 'post',
+        url: window.BigNew.user_edit,
+        data: FD,
+        // 不设置请求头，让liu ra
+        contentType: false,
+        processData: false,
+        success: function(data) {
+          if (data.code == 200) {
+            alert(data.msg);
+            // console.log(window.parent);
+
+          }
+        }
+      })
+
+    });
   })
 </script>
 
