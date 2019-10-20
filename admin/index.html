@@ -55,7 +55,7 @@
     </div>
   </div>
 </body>
-<script src="../js/jquery-1.12.4.min.js"></script>
+<script src="./libs/jquery-1.12.4.min.js"></script>
 <script>
   $(function() {
     // 文章管理点击打开关闭逻辑
@@ -70,12 +70,8 @@
     //   个人信息获取，和token验证
     $.ajax({
       type: "get",
-      url: 'http://192.168.156.81:8080/api/v1/admin/user/info',
+      url: 'http://localhost:8080/api/v1/admin/user/info',
       dataType: 'json',
-      // 需要设置头部，返回token验证是否成功登入
-      headers: {
-        Authorization: window.localStorage.getItem("token")
-      },
       success: function(data) {
         //   改变头像
         $('.user_info img').prop("src", data.data.userPic);
@@ -83,13 +79,8 @@
         $('.user_info span').text(`欢迎  ${data.data.nickname}`);
         // 顶部栏头像
         $('.user_center_link img').prop('src', data.data.userPic);
-      },
-      error: function(e) {
-        alert(e.responseJSON.msg);
-        // 直接重制地址到登入页面
-        window.location.replace('./login.html');
       }
-    })
+    });
   })
 </script>
 
