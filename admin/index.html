@@ -70,7 +70,7 @@
     //   个人信息获取，和token验证
     $.ajax({
       type: "get",
-      url: 'http://localhost:8080/api/v1/admin/user/info',
+      url: window.BigNew.user_info,
       dataType: 'json',
       success: function(data) {
         //   改变头像
