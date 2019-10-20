@@ -116,8 +116,11 @@
         success: function(data) {
           if (data.code == 200) {
             alert(data.msg);
-            // console.log(window.parent);
-
+            //页面刷新，因为使用iframe嵌套，所以需要使用window.parent获取上一级window
+            // window.parent.location.reload();
+            // 如果修改后需要立即重新登入
+            localStorage.clear();
+            window.parent.location.href = './login.html';
           }
         }
       })
