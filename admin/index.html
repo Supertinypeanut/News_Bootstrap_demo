@@ -60,8 +60,16 @@
   $(function() {
     // 文章管理点击打开关闭逻辑
     $(".level01").eq(1).click(function() {
-      $(".level02").slideToggle();
+      $(this).find(".iconfont.icon-arrowdownl").toggleClass("rotate0");
+      $('.level02').slideToggle();
     });
+    // 当点击文章管理内层时，外层文章管理自动高亮，与自己高亮
+    $('.level02').on('click', 'li', function() {
+      $(".level01").eq(1).addClass("active").siblings().removeClass("active");
+      $(this).addClass("active").siblings().removeClass("active");
+    });
+
+
     // 点击按钮高亮
     $(".level01").on("click", function() {
       $(this).addClass("active").siblings().removeClass("active");
