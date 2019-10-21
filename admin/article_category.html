@@ -17,6 +17,7 @@
 </head>
 
 <body>
+
   <div class="container-fluid">
     <div class="common_title">
       文章类别管理
@@ -36,46 +37,109 @@
         <tfoot>
           <tr>
             <td colspan="3" class="text-center">
-              <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal" data-target="#myModal">新增分类</a>
+              <a href="javascript:;" class="btn btn-success" data-toggle="modal" data-target="#myModal">新增分类</a>
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
   </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">新增分类</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="exampleInputEmail1">分类名称</label>
+              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">分类别名</label>
+              <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary" id="addKind">新增</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <!-- 模版引擎 -->
-<script type="text/html" id="content1">
+<script type="text/html" id="content">
   {{ each data}}
   <tr>
     <td>{{$value.name}}</td>
     <td>{{$value.slug}}</td>
     <td class="text-center">
       <a href="javascript:void(0);" data-toggle="modal" class=" btn btn-info btn-xs">编辑</a>
-      <a href="javascript:void(0);" class="btn btn-danger btn-xs">删除</a>
+      <a href="javascript:void(0);" data-id="{{ $value.id }}" class="btn btn-danger btn-xs">删除</a>
     </td>
   </tr>
   {{ /each }}
 </script>
 <script>
   $(function() {
+    // ------------------------------- 首次加载数据---------------------------------------
+    loadData();
 
+    // ---------------------------------新增类别-------------------------------------------
+    // 点击新增按钮已经由bootstrap写好，直接调用
 
-    $.ajax({
-      type: 'get',
-      url: window.BigNew.category_list,
-      dataType: "json",
-      success: function(data) {
-        console.log(data);
-        // 判断是否请求成功
-        if (data.code == 200) {
-          var html = template("content1", data);
-          //   console.log(html);
+    // 为模态框保存按钮注册点击事件
+    $("#addKind").click(function(event) {
+      // 阻止a的默认事件
+      event.preventDefault();
 
-          $("tbody").html(html);
+      // 获取表单数据，并提交到服务器
+      $.ajax({
+        type: 'post',
+        url: BigNew.category_add,
+        data: {
+          name: $("#exampleInputEmail1").val().trim(),
+          slug: $("#exampleInputPassword1").val().trim(),
+        },
+        success: function(data) {
+          console.log(data);
+          //创建成功返回状态码为201
+          if (data.code == 201) {
+            alert(data.msg);
+            // 隐藏模态框
+            $('#myModal').modal('hide');
+            // 刷新页面
+            loadData();
+          }
         }
-      }
+      })
     });
+
+    // ****************因为每次增删改都需要刷新页面，所以将其封装为加载数据函数**********************
+    function loadData() {
+      $.ajax({
+        type: 'get',
+        url: window.BigNew.category_list,
+        dataType: "json",
+        success: function(data) {
+          console.log(data);
+          // 判断是否请求成功
+          if (data.code == 200) {
+            var html = template("content", data);
+            //   console.log(html);
+
+            $("tbody").html(html);
+          }
+        }
+      });
+    }
+
   })
 </script>
 
