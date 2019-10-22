@@ -118,7 +118,7 @@
       }
     });
 
-    // 发送请求，获取编辑信息并渲染
+    // -------------------------发送请求，获取编辑信息并渲染
     $.ajax({
       type: 'get',
       url: BigNew.article_search,
@@ -144,6 +144,16 @@
       }
     });
   });
+  // ----------------------------------封面预览--------------------
+  $('#inputCover').change(function() {
+    // 创建临时路径
+    var imgURL = URL.createObjectURL(this.files[0]);
+    // 替换图片
+    $('.article_cover').prop('src', imgURL);
+
+
+  });
+  // --------------------------------保存修改-----------------
 </script>
 
 </html>
