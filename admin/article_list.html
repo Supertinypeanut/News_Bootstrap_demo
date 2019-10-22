@@ -51,17 +51,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>王积千造统最头</td>
-            <td>杰克</td>
-            <td>奇趣事</td>
-            <td class="text-center">2017-06-08 07:08:46</td>
-            <td class="text-center">已发布</td>
-            <td class="text-center">
-              <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
-              <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
-            </td>
-          </tr>
+
         </tbody>
       </table>
       <div class="row text-center">
@@ -69,30 +59,91 @@
     </div>
   </div>
 </body>
-<!-- 模版引擎 -->
+<!-- 类别模版引擎 -->
 <script type="text/html" id="cateTem">
   <option value="">所有分类</option>
   {{ each data }}
   <option value="{{$value.id}}">{{$value.name}}</option>
   {{ /each }}
 </script>
+<!-- 列表数据模版 -->
+<script type="text/html" id="listData">
+  {{ each data}}
+  <tr>
+    <td>{{$value.title}}</td>
+    <td>{{$value.author}}</td>
+    <td>{{$value.category}}</td>
+    <td class="text-center">{{$value.date}}</td>
+    <td class="text-center">{{$value.state}}</td>
+    <td class="text-center">
+      <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+      <a href="javascript:void(0);" class="btn btn-danger btn-xs delete">删除</a>
+    </td>
+  </tr>
+  {{ /each}}
+</script>
 <script>
   $(function() {
-    // 获取类别
+    // ---------------------获取类别---------------
     $.ajax({
       type: 'get',
       url: BigNew.category_list,
       success: function(data) {
-        console.log(data);
+        // console.log(data);
         if (data.code == 200) {
           // 调用模版引擎
           var opt = template("cateTem", data);
           // 渲染页面
           $('#selCategory').html(opt);
         }
-
       }
-    })
+    });
+    // 首次页面信息渲染
+    loadDate();
+
+    // -----------------筛选类别按钮逻辑-----------------
+    // 注册筛选按钮点击事件
+    $('#btnSearch').click(function(event) {
+      // 阻止默认事件
+      event.preventDefault();
+      // 创建请求参数对象,获取按钮值
+      // var obj = {
+      //   type: $(this).siblings('#selCategory').val(),
+      //   state: $(this).siblings('#selStatus').val()
+      // };
+
+      loadDate();
+      // console.log(type, state);
+
+    });
+
+
+
+    // ***********************渲染列表数据************
+    // 默认每页十条消息展示
+    function loadDate(obj) {
+      // 默认请求配置
+      var objDefault = {
+        perpage: 10,
+        type: $('#selCategory').val(),
+        state: $('#selStatus').val()
+      };
+      $.ajax({
+        type: 'get',
+        url: BigNew.article_query,
+        data: objDefault,
+        success: function(data) {
+          console.log(data);
+          if (data.code == 200) {
+            // 调用模版引擎
+            var lts = template("listData", data.data);
+            // 渲染页面
+            $('tbody').html(lts);
+          }
+        }
+      });
+    }
+
   })
 </script>
 
