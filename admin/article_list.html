@@ -25,11 +25,7 @@
         <div class="col-xs-6">
           <form class="form-inline">
             <select id="selCategory" name="" class="form-control input-sm">
-                            <option value="">所有分类</option>
-                            <option>未分类</option>
-                            <option>奇趣事</option>
-                            <option>会生活</option>
-                            <option>爱旅行</option>
+                           
                         </select>
             <select id="selStatus" name="" class="form-control input-sm">
                             <option value="">所有状态</option>
@@ -73,6 +69,31 @@
     </div>
   </div>
 </body>
+<!-- 模版引擎 -->
+<script type="text/html" id="cateTem">
+  <option value="">所有分类</option>
+  {{ each data }}
+  <option value="{{$value.id}}">{{$value.name}}</option>
+  {{ /each }}
+</script>
+<script>
+  $(function() {
+    // 获取类别
+    $.ajax({
+      type: 'get',
+      url: BigNew.category_list,
+      success: function(data) {
+        console.log(data);
+        if (data.code == 200) {
+          // 调用模版引擎
+          var opt = template("cateTem", data);
+          // 渲染页面
+          $('#selCategory').html(opt);
+        }
 
+      }
+    })
+  })
+</script>
 
 </html>
