@@ -1,4 +1,7 @@
 $(function() {
+  // 文章原有状态
+  let state;
+
   // 创建富文本
   var E = window.wangEditor;
   var editor = new E('#editText');
@@ -8,7 +11,7 @@ $(function() {
 
   // 获取数据ID
   var id = location.search.split('=')[1];
-  // console.log(id);
+  // console.log(location.search);
 
 
   // ---------------------------------------------获取类别---------------
@@ -34,7 +37,7 @@ $(function() {
       id: id
     },
     success: function(data) {
-      // console.log(data);
+      console.log(data);
       if (data.code = 200) {
         // id
         $('.id').val(data.data.id);
@@ -46,6 +49,8 @@ $(function() {
         $('.form-control.category').val(data.data.categoryId);
         // 时间
         $('#dateinput').val(data.data.date);
+        // 文章状态
+        state = data.data.state;
 
         // 富文本
         editor.txt.html(data.data.content);
@@ -64,19 +69,25 @@ $(function() {
 
 
   });
-  // --------------------------------保存修改-----------------
-  // 点击保存按钮
-  $('.btn.btn-success.btn-edit').click(function(event) {
+
+  // --------------------------------保存修改或草稿--- 因为业务逻辑基本相同--------------
+  // 点击保存按钮或者草稿按钮
+  $('.btn.btn-success.btn-edit,.btn.btn-default.btn-draft').click(function(event) {
     // 阻止默认事件
     event.preventDefault();
     // 获取表单对象formdata
     var FD = new FormData($('form')[0]);
     // 获取富文本内容
     var txt = editor.txt.html();
-    $('').pre
+
     FD.append('content', txt);
+    // 判断是修改按钮还是草稿按钮，是修改按钮
+    if (this == $('.btn.btn-default.btn-draft')[0]) {
+      // 改变状态
+      state = '';
+    }
     // 发布状态
-    FD.append('state', '已发布');
+    FD.append('state', state);
     $.ajax({
       type: 'post',
       url: BigNew.article_edit,
@@ -90,7 +101,6 @@ $(function() {
           // 修改成功返回
           location.href = './article_list.html';
         }
-
       }
     })
   });
