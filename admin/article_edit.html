@@ -25,6 +25,7 @@
     </div>
     <div class="container-fluid common_con">
       <form class="form-horizontal article_form" id="form">
+        <input type="hidden" name="id" class="id">
         <div class="form-group">
           <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
           <div class="col-sm-10">
@@ -41,13 +42,7 @@
         <div class="form-group">
           <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
           <div class="col-sm-4">
-            <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
-                            <option>类别二</option>
-                            <option>类别三</option>
-                            <option selected>类别四</option>
-                            <option>类别五</option>
-                        </select>
+            <select class="form-control category" name="categoryId"></select>
           </div>
         </div>
         <div class="form-group">
@@ -55,7 +50,7 @@
           <div class="col-sm-2">
 
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+              <input type="text" name="date" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button" onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i class="iconfont icon-icondate"></i></button>
                 </span>
@@ -89,71 +84,6 @@
   <option value="{{$value.id}}">{{$value.name}}</option>
   {{ /each }}
 </script>
-<script>
-  $(function() {
-    // 创建富文本
-    var E = window.wangEditor
-    var editor = new E('#editText')
-      // 或者 var editor = new E( document.getElementById('editor') )
-    editor.create();
-
-
-    // 获取数据ID
-    var id = location.search.split('=')[1];
-    console.log(id);
-
-
-    // ---------------------------------------------获取类别---------------
-    $.ajax({
-      type: 'get',
-      url: BigNew.category_list,
-      success: function(data) {
-        // console.log(data);
-        if (data.code == 200) {
-          // 调用模版引擎
-          var opt = template("cateTem", data);
-          // 渲染页面
-          $('.form-control.category').html(opt);
-        }
-      }
-    });
-
-    // -------------------------发送请求，获取编辑信息并渲染
-    $.ajax({
-      type: 'get',
-      url: BigNew.article_search,
-      data: {
-        id: id
-      },
-      success: function(data) {
-        console.log(data);
-        if (data.code = 200) {
-          //标题
-          $('#inputTitle').val(data.data.title);
-          // 封面
-          $('.article_cover').val(data.data.cover);
-          // 类别
-          $('.form-control.category').val(data.data.categoryId);
-          // 时间
-          $('#dateinput').val(data.data.date);
-
-          // 富文本
-          editor.txt.html(data.data.content);
-        }
-
-      }
-    });
-  });
-  // ----------------------------------封面预览--------------------
-  $('#inputCover').change(function() {
-    // 创建临时路径
-    var imgURL = URL.createObjectURL(this.files[0]);
-    // 替换图片
-    $('.article_cover').prop('src', imgURL);
-
-
-  });
-  // --------------------------------保存修改-----------------
-</script>
+<script src="./js/article_edit.js"></script>
 
 </html>
