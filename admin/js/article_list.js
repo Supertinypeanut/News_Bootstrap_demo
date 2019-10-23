@@ -31,7 +31,9 @@ $(function() {
     // console.log(type, state);
 
   });
-  console.log('删除列表逻辑');
+
+
+
   // ----------------------------删除列表逻辑------------------------
   $('tbody').on('click', '.btn.btn-danger.btn-xs.delete', function(event) {
     event.preventDefault();
@@ -48,6 +50,8 @@ $(function() {
           // console.log(data);
           if (data.code == 204) {
             alert(data.msg);
+            // 渲染页面
+            loadDate();
           }
         }
       });
