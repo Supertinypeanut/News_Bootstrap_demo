@@ -31,8 +31,28 @@ $(function() {
     // console.log(type, state);
 
   });
-
-
+  console.log('删除列表逻辑');
+  // ----------------------------删除列表逻辑------------------------
+  $('tbody').on('click', '.btn.btn-danger.btn-xs.delete', function(event) {
+    event.preventDefault();
+    // 删除提示处理
+    if (confirm('真的要删除吗！！！')) {
+      //  获取删除id
+      const id = $(this).data('id');
+      // console.log(id);
+      $.ajax({
+        type: 'post',
+        url: BigNew.article_delete,
+        data: { id: id },
+        success: (data) => {
+          // console.log(data);
+          if (data.code == 204) {
+            alert(data.msg);
+          }
+        }
+      });
+    }
+  });
 
   // **********************************************渲染列表数据************
   // 默认每页十条消息展示
@@ -123,5 +143,8 @@ $(function() {
     // 重置分页插件的页数与页数按钮个数
     $('#pagination-demo').twbsPagination('changeTotalPages', data.data.totalPage, 1);
   }
+
+
+
 
 })
