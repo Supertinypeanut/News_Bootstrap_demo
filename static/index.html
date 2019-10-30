@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>大事件-首页</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <div class="header">
+    <a href="#" class="logo fl"><img src="images/logo.png" alt="logo"></a>
+    <div class="search_form fl">
+      <input type="text" class="search_txt" placeholder="黑洞照片">
+      <button class="search_btn"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="link_info fr">
+      <a href="#"><i class="fa fa-angle-right"></i>&nbsp;&nbsp;网站地图</a><br>
+      <a href="#"><i class="fa fa-angle-right"></i>&nbsp;&nbsp;招聘信息</a>
+    </div>
+  </div>
+
+  <div class="menu_con">
+    <div class="menu">
+      <div class="menu_collapse fl">
+        <a href="javascript:;" class="level_one"><i class="fa fa-list-ul"></i>全部分类</a>
+        <ul class="level_two">
+          <li class="up"></li>
+          <li><a href="./list.html">最 新</a></li>
+          <li><a href="./list.html">科 技</a></li>
+          <li><a href="./list.html">股 市</a></li>
+          <li><a href="./list.html">商 品</a></li>
+          <li><a href="./list.html">外 汇</a></li>
+          <li><a href="./list.html">公 司</a></li>
+        </ul>
+      </div>
+      <ul class="left_menu fl">
+        <li><a href="#">最 新</a></li>
+        <li><a href="#">科 技</a></li>
+        <li><a href="#">股 市</a></li>
+        <li><a href="#">商 品</a></li>
+        <li><a href="#">外 汇</a></li>
+        <li><a href="#">公 司</a></li>
+      </ul>
+      <ul class="right_menu fr">
+        <li><a href="#">科技专题</a></li>
+        <li><a href="#">财经专题</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main_con clearfix">
+    <div class="left_con">
+      <ul class="focus_list">
+        <!-- 填充热点图 -->
+      </ul>
+
+      <div class="common_title">
+        <h3><i class="fa fa-edit"></i> 最新资讯</h3>
+        <a href="#" class="more"><i class="fa fa-angle-double-right"></i></a>
+      </div>
+
+      <div class="common_news">
+        <!-- 填充最新资讯 -->
+      </div>
+
+    </div>
+    <div class="right_con">
+      <div class="common_wrap">
+        <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
+        <ul class="content_list hotrank_list">
+          <!-- 填充热门排行 -->
+        </ul>
+      </div>
+      <div class="common_wrap">
+        <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
+        <ul class="content_list comment_list">
+          <!--填充最新评论 -->
+        </ul>
+      </div>
+      <div class="common_wrap">
+        <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
+        <ul class="content_list guanzhu_list">
+          <!-- 焦点关注填充 -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer clearfix">
+    <div class="foot_link">
+      <a href="#">关于我们</a>
+      <span>|</span>
+      <a href="#">联系我们</a>
+      <span>|</span>
+      <a href="#">招聘人才</a>
+      <span>|</span>
+      <a href="#">友情链接</a>
+    </div>
+    <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
+    <p>电话：0755-****888 粤ICP备*******8号</p>
+  </div>
+
+  <!-- 导入模板引擎js文件 -->
+  <script src="./js/template-web.js"></script>
+  <!-- 引入jq文件 -->
+  <script src="./js/jquery-1.12.4.min.js"></script>
+</body>
+<!-- 热点图模版 -->
+<script type="text/html" id="hotpic">
+  {{ each data }} {{ if $index==0 }}
+  <li class="first">
+    {{ else }}
+    <li>
+      {{ /if }}
+      <a href="./article.html?id={{$value.id}}"><img src="{{$value.cover}}" alt=""></a>
+      <p>{{$value.title}}</p>
+    </li>
+    {{ /each }}
+</script>
+<!-- 最新资讯模版 -->
+<script type="text/html" id="latest">
+  {{ each data }}
+  <div class="common_news_list">
+    <a href="./article.html?id={{$value.id}}" class="list_pic"><img src="{{$value.cover}}" alt=""></a>
+    <h4><a href="./article.html?id={{$value.id}}">{{$value.title}}</a></h4>
+    <p>{{$value.intro}}
+    </p>
+    <div class="new_info">
+      <span>标签：{{$value.category}}&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<i class="fa fa-eye"></i>&nbsp;阅读({{$value.read}})&nbsp;&nbsp;&nbsp;<i class="fa fa-commenting"></i>&nbsp;评论({{$value.comments}} )</span>
+      <b>发布于 {{$value.date}}</b>
+    </div>
+  </div>
+  {{ /each }}
+</script>
+<!-- 热门排行 -->
+<script type="text/html" id="rank">
+  {{ each data}}
+  <li><span>{{$index + 1}}</span><a href="./article.html?id={{$value.id}}">{{$value.title}}</a></li>
+  {{ /each }}
+</script>
+<!-- 最新评论 -->
+<script type="text/html" id="latest_comment">
+  {{ each data}}
+  <li>
+    <span>{{ ($value.author).slice(0,1) }}</span>
+    <b><em>{{$value.author}}</em> {{$value.date}}({{$value.time}})说:</b>
+    <strong>{{$value.intro}}</strong>
+  </li>
+  {{ /each }}
+</script>
+<!-- 焦点评论 -->
+<script type="text/html" id="attention">
+  {{ each data}}
+  <li><a href="./article.html">{{$value.intro}}</a></li>
+  {{ /each}}
+</script>
+<script>
+  $(function() {
+    // ****************最新资讯**********
+    $.ajax({
+        type: 'get',
+        url: requestURL.hotpic,
+        success(data) {
+          //   console.log(data);
+          const htmlTxt = template('hotpic', data);
+          $('.focus_list').html(htmlTxt);
+        }
+      })
+      // **************最新资讯**************
+    $.ajax({
+        type: 'get',
+        url: requestURL.latest,
+        success(data) {
+          //   console.log(data);
+          const htmlTxt = template('latest', data);
+          $('.common_news').html(htmlTxt);
+        }
+      })
+      // **************热门排行**************
+    $.ajax({
+        type: 'get',
+        url: requestURL.rank,
+        success(data) {
+          // console.log(data);
+          const htmlTxt = template('rank', data);
+          $('.hotrank_list').html(htmlTxt);
+          //加类名
+          $('.hotrank_list').find('span')[0].classList.add('first');
+          $('.hotrank_list').find('span')[1].classList.add('second');
+          $('.hotrank_list').find('span')[2].classList.add('third');
+        }
+      })
+      // **************最新评论**************
+    $.ajax({
+        type: 'get',
+        url: requestURL.latest_comment,
+        success(data) {
+          //   console.log(data);
+          const htmlTxt = template('latest_comment', data);
+          $('.comment_list').html(htmlTxt);
+        }
+      })
+      // **************焦点关注**************
+    $.ajax({
+      type: 'get',
+      url: requestURL.attention,
+      success(data) {
+        console.log(data);
+        const htmlTxt = template('attention', data);
+        $('.guanzhu_list').html(htmlTxt);
+      }
+    })
+
+  })
+</script>
+
+</html>
