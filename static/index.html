@@ -30,21 +30,11 @@
         <a href="javascript:;" class="level_one"><i class="fa fa-list-ul"></i>全部分类</a>
         <ul class="level_two">
           <li class="up"></li>
-          <li><a href="./list.html">最 新</a></li>
-          <li><a href="./list.html">科 技</a></li>
-          <li><a href="./list.html">股 市</a></li>
-          <li><a href="./list.html">商 品</a></li>
-          <li><a href="./list.html">外 汇</a></li>
-          <li><a href="./list.html">公 司</a></li>
+          <!-- 文章类型渲染 -->
         </ul>
       </div>
       <ul class="left_menu fl">
-        <li><a href="#">最 新</a></li>
-        <li><a href="#">科 技</a></li>
-        <li><a href="#">股 市</a></li>
-        <li><a href="#">商 品</a></li>
-        <li><a href="#">外 汇</a></li>
-        <li><a href="#">公 司</a></li>
+        <!-- 文章类型渲染 -->
       </ul>
       <ul class="right_menu fr">
         <li><a href="#">科技专题</a></li>
@@ -110,6 +100,12 @@
   <!-- 引入jq文件 -->
   <script src="./js/jquery-1.12.4.min.js"></script>
 </body>
+<!-- 文章类型模版 -->
+<script type="text/html" id="category">
+  {{ each data }}
+  <li><a href="./list.html?id={{$value.id}}">{{$value.name}}</a></li>
+  {{ /each }}
+</script>
 <!-- 热点图模版 -->
 <script type="text/html" id="hotpic">
   {{ each data }} {{ if $index==0 }}
@@ -161,7 +157,17 @@
 </script>
 <script>
   $(function() {
-    // ****************最新资讯**********
+    // ****************文章类别**********
+    $.ajax({
+        type: 'get',
+        url: requestURL.category,
+        success(data) {
+          console.log(data);
+          const htmlTxt = template('category', data);
+          $('.level_two,.left_menu').html(htmlTxt);
+        }
+      })
+      // ****************最新资讯**********
     $.ajax({
         type: 'get',
         url: requestURL.hotpic,
@@ -210,11 +216,33 @@
       type: 'get',
       url: requestURL.attention,
       success(data) {
-        console.log(data);
+        // console.log(data);
         const htmlTxt = template('attention', data);
         $('.guanzhu_list').html(htmlTxt);
       }
     })
+
+    // 搜索关键词
+    //点击搜索
+    $('.search_btn').on('click', function() {
+      //获取搜索框的值
+      let key = $(this).siblings('input').val();
+      if (!key) {
+        key = $(this).siblings('input').prop('placeholder');
+      }
+      window.location.href = `./list.html?key=${key}`;
+    });
+    //回车搜索
+    $('.search_txt').on('keydown', function() {
+      if (event.keyCode == 13) {
+        //获取搜索框的值
+        let key = $(this).val();
+        if (!key) {
+          key = $(this).prop('placeholder');
+        }
+        window.location.href = `./list.html?key=${key}`;
+      }
+    });
 
   })
 </script>
